@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import RedeFooter from '../components/RedeFooter.astro';
 
 const YOUTUBE_TOPICO = 'https://www.youtube.com/@PRODERMACHADO';
 const YOUTUBE_EMMUSIC = 'https://www.youtube.com/@emproducooesofficial6670';
@@ -145,6 +146,7 @@ const structuredData = {
   description="Ouça as últimas músicas do Eder Machado (Prod. Eder Machado): singles, clipes oficiais e links pra Spotify, Apple Music, Deezer e YouTube."
   image="/images/eder-avatar.png"
   structuredData={structuredData}
+  redeAtual="Eder Machado"
 >
   <main>
     <!-- HERO: música do momento -->
@@ -257,9 +259,9 @@ const structuredData = {
         <h2 class="font-display text-3xl text-paper">Últimos lançamentos</h2>
         <p class="mt-2 text-sm text-paper/60">Ouça direto nas plataformas digitais.</p>
 
-        <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div class="mt-8 flex snap-x snap-mandatory justify-center gap-4 overflow-x-auto pb-4">
           {demaisReleases.map((r) => (
-            <div class="glow-card flex flex-col overflow-hidden rounded-2xl border border-ink-line bg-ink-raised">
+            <div class="glow-card flex w-56 shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-ink-line bg-ink-raised">
               <span class="relative block aspect-square w-full overflow-hidden">
                 <img
                   src={r.cover}
@@ -379,7 +381,7 @@ const structuredData = {
     <!-- PERFIL DO ARTISTA -->
     <section class="px-6 py-14">
       <div class="mx-auto max-w-2xl rounded-2xl border border-ink-line bg-ink-raised p-8 text-center">
-        <h2 class="font-display text-2xl text-paper">Quem é o Eder</h2>
+        <h2 class="font-display text-2xl text-paper">Quem é o Eder Machado</h2>
         <p class="mt-4 text-sm leading-relaxed text-paper/70">
           Eder Machado produz e canta música gospel e sertanejo gospel, com single novo saindo
           quase todo mês. Também é o produtor por trás da EM Music Produções, gravando,
@@ -397,23 +399,8 @@ const structuredData = {
 
     <!-- RODAPÉ -->
     <footer class="border-t border-ink-line px-6 py-10 pb-10">
-      <div class="mx-auto flex max-w-4xl flex-col items-center gap-5 text-center">
-        <p class="text-xs uppercase tracking-[0.2em] text-paper/40">Parte da</p>
-        <div class="flex flex-wrap items-center justify-center gap-x-8 gap-y-4">
-          <a href="https://loopsbrasil.com.br" target="_blank" rel="noopener noreferrer">
-            <img src="/images/loopsbrasil-logo.png" alt="Rede Loops Brasil" class="h-7 w-auto opacity-70 grayscale transition hover:opacity-100 hover:grayscale-0" width="800" height="340" loading="lazy" />
-          </a>
-          <img src="/images/edtmusic-logo.png" alt="EDTMusic" class="h-4 w-auto opacity-70 grayscale" width="753" height="160" loading="lazy" />
-          <a href="https://emmusicproducoes.com.br" target="_blank" rel="noopener noreferrer">
-            <img src="/images/em-music-logo.png" alt="EM Music Produções" class="h-6 w-auto opacity-70 grayscale transition hover:opacity-100 hover:grayscale-0" width="578" height="240" loading="lazy" />
-          </a>
-          <a href="https://edtutoriais.com.br" target="_blank" rel="noopener noreferrer">
-            <img src="/images/edtutoriais-logo.png" alt="ED Tutoriais" class="h-5 w-auto opacity-70 grayscale transition hover:opacity-100 hover:grayscale-0" width="80" height="38" loading="lazy" />
-          </a>
-          <a href="https://samplesbrasil.com" target="_blank" rel="noopener noreferrer">
-            <img src="/images/samplesbrasil-logo.png" alt="Samples Brasil" class="h-4 w-auto opacity-70 grayscale transition hover:opacity-100 hover:grayscale-0" width="200" height="43" loading="lazy" />
-          </a>
-        </div>
+      <div class="mx-auto max-w-4xl">
+        <RedeFooter atual="Eder Machado" />
       </div>
     </footer>
   </main>
