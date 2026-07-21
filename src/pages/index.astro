@@ -1,6 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import RedeFooter from '../components/RedeFooter.astro';
 
 const YOUTUBE_TOPICO = 'https://www.youtube.com/@PRODERMACHADO';
 const YOUTUBE_EMMUSIC = 'https://www.youtube.com/@emproducooesofficial6670';
@@ -146,7 +145,6 @@ const structuredData = {
   description="Ouça as últimas músicas do Eder Machado (Prod. Eder Machado): singles, clipes oficiais e links pra Spotify, Apple Music, Deezer e YouTube."
   image="/images/eder-avatar.png"
   structuredData={structuredData}
-  redeAtual="Eder Machado"
 >
   <main>
     <!-- HERO: música do momento -->
@@ -402,12 +400,6 @@ const structuredData = {
       </div>
     </section>
 
-    <!-- RODAPÉ -->
-    <footer class="border-t border-ink-line px-6 py-10 pb-10">
-      <div class="mx-auto max-w-4xl">
-        <RedeFooter atual="Eder Machado" />
-      </div>
-    </footer>
   </main>
 
   <script>
