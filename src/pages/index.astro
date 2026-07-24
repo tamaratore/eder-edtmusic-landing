@@ -5,15 +5,6 @@ import RedeFooter from '../components/RedeFooter.astro';
 const YOUTUBE_TOPICO = 'https://www.youtube.com/@PRODERMACHADO';
 const YOUTUBE_EMMUSIC = 'https://www.youtube.com/@emproducooesofficial6670';
 
-// logos oficiais de cada plataforma, hospedados pela própria Ditto Music (CDN
-// assets.ffm.to), mesma fonte usada em emmusicproducoes.com.br (confirmados 17/07)
-const PLATFORM_LOGOS = {
-  spotify: 'https://cloudinary-cdn.ffm.to/s--DnYCoqSX--/w_64,h_64,c_limit/f_webp/https%3A%2F%2Fassets.ffm.to%2Fimages%2Flogo%2Fmusic-service_spotify_without_text.png',
-  apple: 'https://cloudinary-cdn.ffm.to/s--tXfmuRiI--/w_64,h_64,c_limit/f_webp/https%3A%2F%2Fassets.ffm.to%2Fimages%2Flogo%2Fmusic-service_applemusic_without_text.png',
-  deezer: 'https://cloudinary-cdn.ffm.to/s--8rjR1rrJ--/w_64,h_64,c_limit/f_webp/https%3A%2F%2Fassets.ffm.to%2Fimages%2Flogo%2Fmusic-service_deezer_without_text_new.png',
-  youtube: 'https://cloudinary-cdn.ffm.to/s--3lH9NQ9o--/w_64,h_64,c_limit/f_webp/https%3A%2F%2Fassets.ffm.to%2Fimages%2Flogo%2Fmusic-service_youtube_without_text.png',
-};
-
 // lançamentos reais distribuídos via Ditto Music (mesma fonte confirmada em
 // emmusicproducoes.com.br, 17/07), ordenados do mais novo pro mais antigo.
 // O primeiro da lista é a "música do momento" em destaque no hero.
@@ -93,8 +84,11 @@ const releases = [
   },
 ];
 
-const destaque = releases[0];
-const demaisReleases = releases.slice(1);
+// video de fundo do hero: "Acorda Pra Vida", indicado pela Tore 24/07
+const HERO_YT_ID = 'LFk7ycNWVZA';
+const heroYoutubeEmbed = `https://www.youtube-nocookie.com/embed/${HERO_YT_ID}?autoplay=1&mute=1&loop=1&playlist=${HERO_YT_ID}&controls=0&modestbranding=1&rel=0&showinfo=0&disablekb=1&playsinline=1&iv_load_policy=3`;
+const destaque = releases.find((r) => r.youtube.includes(HERO_YT_ID)) || releases[0];
+const demaisReleases = releases.filter((r) => r !== destaque);
 
 // clipes oficiais reais do canal (confirmados 17/07, ver emmusicproducoes.com.br)
 const clipes = [
@@ -148,18 +142,26 @@ const structuredData = {
   structuredData={structuredData}
 >
   <main>
-    <!-- HERO: música do momento -->
-    <section class="relative overflow-hidden px-6 pt-14 pb-14 sm:pt-20">
-      <div
-        class="pointer-events-none absolute -right-24 -top-24 h-72 w-72 rounded-full bg-brand-orange/15 blur-3xl"
-        aria-hidden="true"
-      >
+    <!-- HERO: video de fundo (Acorda Pra Vida) + single em destaque -->
+    <section class="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 py-20">
+      <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
+        <div class="hero-yt-wrap">
+          <iframe
+            class="hero-yt-iframe"
+            src={heroYoutubeEmbed}
+            title=""
+            allow="autoplay; encrypted-media"
+            tabindex="-1"
+          ></iframe>
+        </div>
+        <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/15 to-black"></div>
       </div>
-      <div class="relative mx-auto max-w-xl text-center">
+
+      <div class="relative mx-auto max-w-xl text-center [text-shadow:0_1px_3px_rgba(0,0,0,0.85),0_2px_10px_rgba(0,0,0,0.5)]">
         <img
           src="/images/eder-avatar.png"
           alt="Prod. Eder Machado"
-          class="mx-auto h-16 w-auto sm:h-20"
+          class="mx-auto h-14 w-auto sm:h-16"
           width="571"
           height="365"
         />
@@ -172,78 +174,28 @@ const structuredData = {
           <span class="eq-bar w-1.5 rounded-full bg-brand-orange"></span>
         </div>
 
-        <h1 class="balance mt-5 font-display text-4xl leading-[0.95] text-paper sm:text-5xl">
+        <h1 class="balance mt-5 font-hero text-4xl leading-[1.1] text-white sm:text-5xl">
           EDER MACHADO
         </h1>
-      </div>
-    </section>
 
-    <!-- MÚSICA DO MOMENTO -->
-    <section class="px-6 pb-14">
-      <div class="mx-auto max-w-3xl">
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange">
-          Música do momento
+        <p class="mt-8 text-xs font-semibold uppercase tracking-[0.2em] text-brand-orange">
+          Single em destaque
         </p>
-        <h2 class="mt-2 font-display text-2xl text-paper sm:text-3xl">{destaque.title}</h2>
-        <p class="mt-1 text-sm text-paper/50">{destaque.artist}</p>
+        <h2 class="mt-2 font-display text-2xl font-bold text-white sm:text-3xl">{destaque.title}</h2>
+        <p class="mt-1 text-sm text-white/70">{destaque.artist}</p>
 
-        <div
-          class="video-facade group relative mt-6 block aspect-video w-full cursor-pointer overflow-hidden rounded-2xl border border-ink-line bg-ink-raised"
-          data-youtube-id={destaque.clipeOficialId}
-          role="button"
-          tabindex="0"
-          aria-label={`Assistir o clipe de ${destaque.title}`}
-        >
-          <img
-            src={`https://i.ytimg.com/vi/${destaque.clipeOficialId}/maxresdefault.jpg`}
-            alt={`Trecho do clipe de ${destaque.title}`}
-            loading="eager"
-            class="h-full w-full object-cover"
-          />
-          <span class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/0 to-ink/0"></span>
-          <span class="video-play-btn pointer-events-none absolute inset-0 flex items-center justify-center">
-            <span class="flex h-16 w-16 items-center justify-center rounded-full bg-brand-orange">
-              <svg viewBox="0 0 24 24" class="ml-1 h-7 w-7 fill-ink"><path d="M8 5v14l11-7z" /></svg>
-            </span>
-          </span>
-        </div>
-
-        <div class="mt-5 flex flex-wrap justify-center gap-2">
-          <a
-            href={destaque.spotify}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center gap-1.5 rounded-full border border-ink-line py-1.5 pl-1.5 pr-3 text-xs font-semibold text-paper/70 transition hover:border-brand-orange hover:text-paper"
-          >
-            <img src={PLATFORM_LOGOS.spotify} alt="" class="h-4 w-4" loading="lazy" />
-            Spotify
+        <div class="mt-6 flex items-center justify-center gap-5">
+          <a href={destaque.spotify} target="_blank" rel="noopener noreferrer" aria-label={`Ouvir ${destaque.title} no Spotify`} class="text-white transition hover:text-brand-orange">
+            <svg viewBox="0 0 24 24" class="h-6 w-6 fill-current"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm4.59 14.4a.62.62 0 0 1-.86.2c-2.36-1.44-5.33-1.77-8.83-.97a.62.62 0 1 1-.28-1.21c3.83-.88 7.12-.5 9.77 1.12.3.18.4.57.2.86Zm1.22-2.72a.78.78 0 0 1-1.07.26c-2.7-1.66-6.82-2.14-10.02-1.17a.78.78 0 1 1-.45-1.49c3.65-1.1 8.18-.57 11.28 1.33.37.23.49.72.26 1.07Zm.11-2.83c-3.24-1.92-8.59-2.1-11.68-1.16a.93.93 0 1 1-.54-1.78c3.55-1.08 9.44-.87 13.16 1.34a.93.93 0 1 1-.94 1.6Z"/></svg>
           </a>
-          <a
-            href={destaque.apple}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center gap-1.5 rounded-full border border-ink-line py-1.5 pl-1.5 pr-3 text-xs font-semibold text-paper/70 transition hover:border-brand-orange hover:text-paper"
-          >
-            <img src={PLATFORM_LOGOS.apple} alt="" class="h-4 w-4" loading="lazy" />
-            Apple Music
+          <a href={destaque.apple} target="_blank" rel="noopener noreferrer" aria-label={`Ouvir ${destaque.title} no Apple Music`} class="text-white transition hover:text-brand-orange">
+            <svg viewBox="0 0 24 24" class="h-6 w-6 fill-current"><path d="M16.4 1.8c.1 1.1-.3 2.2-1 3-.7.8-1.8 1.5-2.9 1.4-.1-1.1.4-2.2 1-3 .8-.8 2-1.4 2.9-1.4Zm3.5 16.4c-.3.7-.6 1.3-1 1.9-.6.9-1.2 1.9-2.2 1.9-.9 0-1.2-.6-2.3-.6s-1.4.6-2.3.6c-.9 0-1.6-.9-2.2-1.8-1.5-2.2-2.6-6.2-1.1-8.9.7-1.3 2-2.2 3.4-2.2 1 0 2 .7 2.6.7.6 0 1.7-.8 2.9-.7.5 0 2 .2 2.9 1.5-.1.1-1.7 1-1.7 3 0 2.4 2.1 3.2 2.1 3.2 0 .1-.3 1.1-1.1 2.4Z"/></svg>
           </a>
-          <a
-            href={destaque.deezer}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center gap-1.5 rounded-full border border-ink-line py-1.5 pl-1.5 pr-3 text-xs font-semibold text-paper/70 transition hover:border-brand-orange hover:text-paper"
-          >
-            <img src={PLATFORM_LOGOS.deezer} alt="" class="h-4 w-4" loading="lazy" />
-            Deezer
+          <a href={destaque.deezer} target="_blank" rel="noopener noreferrer" aria-label={`Ouvir ${destaque.title} no Deezer`} class="text-white transition hover:text-brand-orange">
+            <svg viewBox="0 0 24 24" class="h-6 w-6 fill-current"><rect x="1" y="14" width="4" height="4"/><rect x="7" y="10" width="4" height="8"/><rect x="13" y="6" width="4" height="12"/><rect x="19" y="2" width="4" height="16"/></svg>
           </a>
-          <a
-            href={destaque.youtube}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="flex items-center gap-1.5 rounded-full border border-ink-line py-1.5 pl-1.5 pr-3 text-xs font-semibold text-paper/70 transition hover:border-brand-orange hover:text-paper"
-          >
-            <img src={PLATFORM_LOGOS.youtube} alt="" class="h-4 w-4" loading="lazy" />
-            YouTube
+          <a href={destaque.youtube} target="_blank" rel="noopener noreferrer" aria-label={`Assistir ${destaque.title} no YouTube`} class="text-white transition hover:text-brand-orange">
+            <svg viewBox="0 0 24 24" class="h-6 w-6 fill-current"><path d="M23 12s0-3.6-.46-5.3a2.9 2.9 0 0 0-2-2C18.9 4.2 12 4.2 12 4.2s-6.9 0-8.54.5a2.9 2.9 0 0 0-2 2C1 8.4 1 12 1 12s0 3.6.46 5.3a2.9 2.9 0 0 0 2 2c1.64.5 8.54.5 8.54.5s6.9 0 8.54-.5a2.9 2.9 0 0 0 2-2C23 15.6 23 12 23 12ZM9.75 15.5v-7l6 3.5Z"/></svg>
           </a>
         </div>
       </div>
@@ -252,65 +204,41 @@ const structuredData = {
     <!-- ÚLTIMOS LANÇAMENTOS -->
     <section class="px-6 py-14">
       <div class="mx-auto max-w-4xl">
-        <h2 class="font-display text-3xl text-paper">Últimos lançamentos</h2>
-        <p class="mt-2 text-sm text-paper/60">Ouça direto nas plataformas digitais.</p>
+        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-brand-orange">Discografia</p>
+        <h2 class="mt-2 font-display text-3xl text-paper">Últimos lançamentos</h2>
+        <div class="mt-4 h-px w-16 bg-brand-orange"></div>
+        <p class="mt-4 text-sm text-paper/60">Ouça direto nas plataformas digitais.</p>
 
         <div class="mt-8 flex snap-x snap-mandatory justify-center gap-4 overflow-x-auto pb-4">
           {demaisReleases.map((r) => (
-            <div class="glow-card flex w-56 shrink-0 snap-start flex-col overflow-hidden rounded-2xl border border-ink-line bg-ink-raised">
+            <div class="media-card group flex w-56 shrink-0 snap-start flex-col overflow-hidden bg-ink-raised">
               <span class="relative block aspect-square w-full overflow-hidden">
                 <img
                   src={r.cover}
                   alt={`Capa de ${r.title}`}
                   loading="lazy"
-                  class="h-full w-full object-cover"
+                  class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 />
+                <span class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink via-ink/10 to-transparent" />
+                <span class="absolute inset-x-0 bottom-0 p-4">
+                  <p class="font-display text-lg font-semibold leading-tight text-white">{r.title}</p>
+                  <span class="mt-2 block h-px w-10 bg-white/50"></span>
+                  <p class="mt-2 text-xs uppercase tracking-wide text-white/60">{r.artist}</p>
+                </span>
               </span>
-              <div class="p-4">
-                <p class="font-display text-lg leading-tight text-paper">{r.title}</p>
-                <p class="mt-1 text-xs text-paper/50">{r.artist}</p>
-                <div class="mt-3 flex flex-wrap gap-1.5">
-                  <a
-                    href={r.spotify}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Ouvir ${r.title} no Spotify`}
-                    class="flex items-center gap-1.5 rounded-full border border-ink-line py-1 pl-1 pr-2.5 text-[11px] font-semibold text-paper/70 transition hover:border-brand-orange hover:text-paper"
-                  >
-                    <img src={PLATFORM_LOGOS.spotify} alt="" class="h-4 w-4" loading="lazy" />
-                    Spotify
-                  </a>
-                  <a
-                    href={r.apple}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Ouvir ${r.title} no Apple Music`}
-                    class="flex items-center gap-1.5 rounded-full border border-ink-line py-1 pl-1 pr-2.5 text-[11px] font-semibold text-paper/70 transition hover:border-brand-orange hover:text-paper"
-                  >
-                    <img src={PLATFORM_LOGOS.apple} alt="" class="h-4 w-4" loading="lazy" />
-                    Apple Music
-                  </a>
-                  <a
-                    href={r.deezer}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Ouvir ${r.title} no Deezer`}
-                    class="flex items-center gap-1.5 rounded-full border border-ink-line py-1 pl-1 pr-2.5 text-[11px] font-semibold text-paper/70 transition hover:border-brand-orange hover:text-paper"
-                  >
-                    <img src={PLATFORM_LOGOS.deezer} alt="" class="h-4 w-4" loading="lazy" />
-                    Deezer
-                  </a>
-                  <a
-                    href={r.youtube}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Assistir ${r.title} no YouTube`}
-                    class="flex items-center gap-1.5 rounded-full border border-ink-line py-1 pl-1 pr-2.5 text-[11px] font-semibold text-paper/70 transition hover:border-brand-orange hover:text-paper"
-                  >
-                    <img src={PLATFORM_LOGOS.youtube} alt="" class="h-4 w-4" loading="lazy" />
-                    YouTube
-                  </a>
-                </div>
+              <div class="flex items-center gap-4 px-4 py-3">
+                <a href={r.spotify} target="_blank" rel="noopener noreferrer" aria-label={`Ouvir ${r.title} no Spotify`} class="text-white transition hover:text-brand-orange">
+                  <svg viewBox="0 0 24 24" class="h-5 w-5 fill-current"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20Zm4.59 14.4a.62.62 0 0 1-.86.2c-2.36-1.44-5.33-1.77-8.83-.97a.62.62 0 1 1-.28-1.21c3.83-.88 7.12-.5 9.77 1.12.3.18.4.57.2.86Zm1.22-2.72a.78.78 0 0 1-1.07.26c-2.7-1.66-6.82-2.14-10.02-1.17a.78.78 0 1 1-.45-1.49c3.65-1.1 8.18-.57 11.28 1.33.37.23.49.72.26 1.07Zm.11-2.83c-3.24-1.92-8.59-2.1-11.68-1.16a.93.93 0 1 1-.54-1.78c3.55-1.08 9.44-.87 13.16 1.34a.93.93 0 1 1-.94 1.6Z"/></svg>
+                </a>
+                <a href={r.apple} target="_blank" rel="noopener noreferrer" aria-label={`Ouvir ${r.title} no Apple Music`} class="text-white transition hover:text-brand-orange">
+                  <svg viewBox="0 0 24 24" class="h-5 w-5 fill-current"><path d="M16.4 1.8c.1 1.1-.3 2.2-1 3-.7.8-1.8 1.5-2.9 1.4-.1-1.1.4-2.2 1-3 .8-.8 2-1.4 2.9-1.4Zm3.5 16.4c-.3.7-.6 1.3-1 1.9-.6.9-1.2 1.9-2.2 1.9-.9 0-1.2-.6-2.3-.6s-1.4.6-2.3.6c-.9 0-1.6-.9-2.2-1.8-1.5-2.2-2.6-6.2-1.1-8.9.7-1.3 2-2.2 3.4-2.2 1 0 2 .7 2.6.7.6 0 1.7-.8 2.9-.7.5 0 2 .2 2.9 1.5-.1.1-1.7 1-1.7 3 0 2.4 2.1 3.2 2.1 3.2 0 .1-.3 1.1-1.1 2.4Z"/></svg>
+                </a>
+                <a href={r.deezer} target="_blank" rel="noopener noreferrer" aria-label={`Ouvir ${r.title} no Deezer`} class="text-white transition hover:text-brand-orange">
+                  <svg viewBox="0 0 24 24" class="h-5 w-5 fill-current"><rect x="1" y="14" width="4" height="4"/><rect x="7" y="10" width="4" height="8"/><rect x="13" y="6" width="4" height="12"/><rect x="19" y="2" width="4" height="16"/></svg>
+                </a>
+                <a href={r.youtube} target="_blank" rel="noopener noreferrer" aria-label={`Assistir ${r.title} no YouTube`} class="text-white transition hover:text-brand-orange">
+                  <svg viewBox="0 0 24 24" class="h-5 w-5 fill-current"><path d="M23 12s0-3.6-.46-5.3a2.9 2.9 0 0 0-2-2C18.9 4.2 12 4.2 12 4.2s-6.9 0-8.54.5a2.9 2.9 0 0 0-2 2C1 8.4 1 12 1 12s0 3.6.46 5.3a2.9 2.9 0 0 0 2 2c1.64.5 8.54.5 8.54.5s6.9 0 8.54-.5a2.9 2.9 0 0 0 2-2C23 15.6 23 12 23 12ZM9.75 15.5v-7l6 3.5Z"/></svg>
+                </a>
               </div>
             </div>
           ))}
@@ -321,8 +249,10 @@ const structuredData = {
     <!-- CLIPES -->
     <section class="px-6 py-14">
       <div class="mx-auto max-w-4xl">
-        <h2 class="font-display text-3xl text-paper">Clipes</h2>
-        <p class="mt-2 text-sm text-paper/60">Direto do canal, sem imagem de banco.</p>
+        <p class="text-xs font-semibold uppercase tracking-[0.25em] text-brand-orange">Portfólio</p>
+        <h2 class="mt-2 font-display text-3xl text-paper">Clipes</h2>
+        <div class="mt-4 h-px w-16 bg-brand-orange"></div>
+        <p class="mt-4 text-sm text-paper/60">Direto do canal, sem imagem de banco.</p>
 
         <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {clipes.map((c) => (
@@ -330,23 +260,26 @@ const structuredData = {
               href={c.url}
               target="_blank"
               rel="noopener noreferrer"
-              class="glow-card group relative block overflow-hidden rounded-2xl border border-ink-line bg-ink-raised"
+              class="media-card group relative block overflow-hidden bg-ink-raised"
             >
               <span class="relative block aspect-video w-full overflow-hidden">
                 <img
                   src={c.thumb}
                   alt={c.title}
                   loading="lazy"
-                  class="h-full w-full object-cover"
+                  class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                 />
-                <span class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/0 to-ink/0" />
-                <span class="absolute inset-0 flex items-center justify-center">
+                <span class="pointer-events-none absolute inset-0 bg-gradient-to-t from-ink via-ink/10 to-transparent" />
+                <span class="pointer-events-none absolute inset-0 flex items-center justify-center opacity-90 transition group-hover:opacity-100">
                   <span class="flex h-11 w-11 items-center justify-center rounded-full bg-ink/70 ring-1 ring-paper/40">
                     <svg viewBox="0 0 24 24" class="ml-0.5 h-4 w-4 fill-paper"><path d="M8 5v14l11-7z" /></svg>
                   </span>
                 </span>
+                <span class="absolute inset-x-0 bottom-0 p-4">
+                  <p class="text-sm font-semibold leading-tight text-white">{c.title}</p>
+                  <span class="mt-2 block h-px w-10 bg-white/50"></span>
+                </span>
               </span>
-              <p class="p-4 text-sm font-semibold text-paper">{c.title}</p>
               <span class="sr-only"> (abre no YouTube em nova aba)</span>
             </a>
           ))}
@@ -376,7 +309,7 @@ const structuredData = {
 
     <!-- PERFIL DO ARTISTA -->
     <section class="px-6 py-14">
-      <div class="mx-auto max-w-2xl rounded-2xl border border-ink-line bg-ink-raised p-8 text-center">
+      <div class="glow-card mx-auto max-w-2xl rounded-2xl bg-ink-raised p-8 text-center">
         <img
           src="/images/eder-foto.png"
           alt="Eder Machado"

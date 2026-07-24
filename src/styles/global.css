@@ -52,17 +52,21 @@
   }
 }
 
-/* brilho de borda com a cor da assinatura (laranja) ao passar o mouse nos cards:
-   só cor, sem mover/escalar nada (nunca usar tração/scale no hover) */
+/* brilho de borda com a cor da assinatura real do Eder (laranja, confirmado
+   no arquivo oficial /root/print/imagem/images.png - aqui NAO e regra da
+   rede, e a cor propria dele, mantida) - sem borda estatica, so sombra leve
+   parada + brilho no hover */
 .glow-card {
   position: relative;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.35);
+  transition: box-shadow 0.35s ease, transform 0.35s ease;
 }
 .glow-card::before {
   content: '';
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1.5px;
+  padding: 1px;
   background: linear-gradient(135deg, #ff6a00, #da5601);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -71,8 +75,42 @@
   transition: opacity 0.35s ease;
   pointer-events: none;
 }
+.glow-card:hover {
+  box-shadow: 0 10px 30px -8px rgba(255, 106, 0, 0.35);
+  transform: translateY(-2px);
+}
 .glow-card:hover::before {
   opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .glow-card:hover { transform: none; }
+}
+
+.nav-overlay-gradient {
+  /* sem video/imagem no hero desses sites, entao o degrade transparente
+     nao faz sentido (fica com "cara de sem fundo") - fica solido desde o
+     inicio, igual o resto da pagina depois de rolar */
+  background: #100614;
+}
+.nav-overlay-gradient.nav-solid {
+  background: #100614;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+
+.media-card {
+  border-radius: 6px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+.media-card:hover {
+  box-shadow: 0 18px 32px -12px rgba(0, 0, 0, 0.55);
+  transform: translateY(-3px) translateZ(0);
+}
+@media (prefers-reduced-motion: reduce) {
+  .media-card:hover { transform: none; }
 }
 
 /* facade de vídeo: thumbnail clicável que vira iframe do YouTube só quando
@@ -82,4 +120,29 @@
 }
 .video-facade:hover .video-play-btn {
   transform: scale(1.08);
+}
+
+/* video real de fundo do hero, embutido do YouTube, escalado tipo
+   "object-fit: cover" pra cobrir a secao inteira (mesma tecnica do
+   emmusicproducoes.com.br) */
+.hero-yt-wrap {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hero-yt-iframe {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100vw;
+  height: 56.25vw; /* 16:9 */
+  min-height: 100vh;
+  min-width: 177.78vh; /* 16:9 */
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  filter: brightness(0.65) contrast(1.1) saturate(1.05);
+  border: none;
+  outline: none;
+  display: block;
 }
