@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import RedeFooter from '../components/RedeFooter.astro';
+import SiteNav from '../components/SiteNav.astro';
 
 const YOUTUBE_TOPICO = 'https://www.youtube.com/@PRODERMACHADO';
 const YOUTUBE_EMMUSIC = 'https://www.youtube.com/@emproducooesofficial6670';
@@ -141,7 +142,8 @@ const structuredData = {
   image="/images/eder-avatar.png"
   structuredData={structuredData}
 >
-  <main>
+  <SiteNav slot="nav" />
+  <main id="topo">
     <!-- HERO: video de fundo (Acorda Pra Vida) + single em destaque -->
     <section class="relative flex min-h-[100svh] flex-col items-center justify-center overflow-hidden px-6 py-20">
       <div class="absolute inset-0 overflow-hidden" aria-hidden="true">
@@ -203,7 +205,7 @@ const structuredData = {
     </section>
 
     <!-- ÚLTIMOS LANÇAMENTOS -->
-    <section class="px-6 py-14">
+    <section id="musicas" class="px-6 py-14">
       <div class="mx-auto max-w-4xl">
         <p class="text-xs font-semibold uppercase tracking-[0.25em] text-brand-orange">Discografia</p>
         <h2 class="mt-2 font-display text-3xl text-paper">Últimos lançamentos</h2>
@@ -254,7 +256,7 @@ const structuredData = {
     </section>
 
     <!-- CLIPES -->
-    <section class="px-6 py-14">
+    <section id="clipes" class="px-6 py-14">
       <div class="mx-auto max-w-4xl">
         <p class="text-xs font-semibold uppercase tracking-[0.25em] text-brand-orange">Portfólio</p>
         <h2 class="mt-2 font-display text-3xl text-paper">Clipes</h2>
@@ -315,7 +317,7 @@ const structuredData = {
     </section>
 
     <!-- PERFIL DO ARTISTA -->
-    <section class="px-6 py-14">
+    <section id="sobre" class="px-6 py-14">
       <div class="glow-card mx-auto max-w-2xl rounded-2xl bg-ink-raised p-8 text-center">
         <img
           src="/images/eder-foto.png"

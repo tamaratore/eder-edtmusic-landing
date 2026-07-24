@@ -51,6 +51,7 @@ const ogImage = image ? new URL(image, Astro.site).toString() : undefined;
     <Preloader />
     <div id="site-nav-wrap" class="nav-overlay-gradient fixed inset-x-0 top-0 z-50">
       <RedeSwitcher atual={redeAtual || 'Prod. Eder Machado'} />
+      <slot name="nav" />
     </div>
     <SideTabs siteLabel={redeAtual || 'Prod. Eder Machado'} />
     <slot />
