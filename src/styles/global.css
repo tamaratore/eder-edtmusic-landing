@@ -91,6 +91,10 @@
      nao faz sentido (fica com "cara de sem fundo") - fica solido desde o
      inicio, igual o resto da pagina depois de rolar */
   background: #100614;
+  /* esse site TEM video no hero (fundo escurecido) - sem a linha/sombra o
+     menu "some" visualmente contra o degrade preto do video, so aparece
+     depois de rolar pra secao seguinte (mesmo achado do emmusicproducoes) */
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08), 0 4px 16px rgba(0, 0, 0, 0.4);
 }
 .nav-overlay-gradient.nav-solid {
   background: #100614;
